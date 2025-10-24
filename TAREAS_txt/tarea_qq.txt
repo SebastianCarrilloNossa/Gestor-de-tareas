@@ -1,0 +1,7 @@
+=== DATOS DE LA TAREA ===
+ID: 1
+Nombre: qq
+Asignatura: www
+Fecha de inicio: 2025-10-22
+Fecha de entrega: 2025-10-22
+Prioridad: Caducada

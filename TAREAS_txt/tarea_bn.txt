@@ -1,0 +1,7 @@
+=== DATOS DE LA TAREA ===
+ID: 3
+Nombre: bn
+Asignatura: bn
+Fecha de inicio: 2025-10-22
+Fecha de entrega: 2025-10-23
+Prioridad: Alta
