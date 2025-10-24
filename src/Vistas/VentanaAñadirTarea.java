@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author HP
+ * @author 
  */
 public class VentanaAñadirTarea extends javax.swing.JFrame {
 
@@ -236,7 +236,7 @@ public class VentanaAñadirTarea extends javax.swing.JFrame {
         
 
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "❌ Error al guardar la tarea: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "❌  Prueba Error al guardar la tarea: " + e.getMessage());
         e.printStackTrace();
     }
         
