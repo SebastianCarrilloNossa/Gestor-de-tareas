@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 
 public class TareaDAO {
 
-    private static final String DIRECTORIO_TAREAS = "C:\\Users\\HP\\OneDrive\\Documents\\NetBeansProjects\\GESTOR_DE_TAREAS\\TAREAS_txt\\";
+    private static final String DIRECTORIO_TAREAS = "C:\\Users\\Andre\\OneDrive\\Documents\\NetBeansProjects\\Gestor-de-tareas\\TAREAS_txt\\";
 
     // ✅ Constructor: Crea la carpeta si no existe
     public TareaDAO() {
