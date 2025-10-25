@@ -18,6 +18,14 @@ public class TareaDAO {
 
     private static final String DIRECTORIO_TAREAS = "C:\\Users\\HP\\OneDrive\\Documents\\NetBeansProjects\\GESTOR_DE_TAREAS\\TAREAS_txt\\";
 
+    // ✅ Constructor: Crea la carpeta si no existe
+    public TareaDAO() {
+        File carpeta = new File(DIRECTORIO_TAREAS);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs(); 
+        }
+    }
+    
     // METODO Guarda una tarea en un archivo TXT individual
     public boolean registrarTarea(Tarea tarea) {
         String nombreArchivo = DIRECTORIO_TAREAS + "tarea_" + tarea.getNombre().replace(" ", "_") + ".txt";

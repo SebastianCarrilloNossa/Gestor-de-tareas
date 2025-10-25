@@ -4,6 +4,10 @@
  */
 package Vistas;
 
+import Vistas.VentanaPrincipal;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import javax.swing.JOptionPane;
 
 /**
@@ -39,10 +43,13 @@ public class Login extends javax.swing.JFrame {
         txtUsuario = new javax.swing.JTextField();
         txtContrasena = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
+        btnRegistrarUsuario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 51, 51));
+        jPanel1.setMinimumSize(new java.awt.Dimension(800, 400));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitulo.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
@@ -54,20 +61,26 @@ public class Login extends javax.swing.JFrame {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
         lblUsuario.setText("Usuario:");
-        jPanel1.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 60, 20));
+        jPanel1.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 60, 20));
 
         lblContrasena.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         lblContrasena.setForeground(new java.awt.Color(255, 255, 204));
         lblContrasena.setText("Contraseña:");
-        jPanel1.add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, -1, -1));
-        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 170, 30));
+        jPanel1.add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, -1, -1));
+
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 170, 30));
 
         txtContrasena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtContrasenaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 170, 30));
+        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 170, 30));
 
         btnIngresar.setBackground(new java.awt.Color(255, 153, 153));
         btnIngresar.setForeground(new java.awt.Color(255, 0, 0));
@@ -77,17 +90,29 @@ public class Login extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 110, 50));
+        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 110, 50));
+
+        btnRegistrarUsuario.setText("Registrarse");
+        btnRegistrarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarUsuarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRegistrarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 420, 100, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,22 +123,77 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtContrasenaActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-String usuario = txtUsuario.getText().trim();
-String contrasena = new String(txtContrasena.getPassword()).trim();
+                                           
+    String usuarioIngresado = txtUsuario.getText().trim();
+    String contrasenaIngresada = new String(txtContrasena.getPassword()).trim();
 
-if (usuario.equals("admin") && contrasena.equals("1234")) {
-    JOptionPane.showMessageDialog(this, "Inicio de sesión correcto ✅");
+    if (usuarioIngresado.isEmpty() || contrasenaIngresada.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "⚠️ Complete todos los campos");
+        return;
+    }
 
-    // Abrimos la ventana principal
-    VentanaPrincipal ventana = new VentanaPrincipal();
-    ventana.setVisible(true);
-    this.dispose(); // Cierra el login
-} else {
-    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos ❌");
-}
+    boolean acceso = false;
+
+    File carpeta = new File("C:\\Users\\HP\\OneDrive\\Documents\\NetBeansProjects\\GESTOR_DE_TAREAS\\USUARIOS_txt\\");
+    File[] archivos = carpeta.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+
+    if (archivos == null || archivos.length == 0) {
+        JOptionPane.showMessageDialog(this, "⚠️ No hay usuarios registrados.");
+        return;
+    }
+
+    for (File archivo : archivos) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+
+            String usuario = "";
+            String contrasena = "";
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                if (linea.startsWith("Usuario:")) {
+                    usuario = linea.substring(8).trim();
+                }
+                if (linea.startsWith("Contrasena:")) {
+                    contrasena = linea.substring(11).trim();
+                }
+            }
+
+            if (usuario.equals(usuarioIngresado) && contrasena.equals(contrasenaIngresada)) {
+                acceso = true;
+                break;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "❌ Error al leer archivo: " + archivo.getName());
+        }
+    }
+
+    if (acceso) {
+        JOptionPane.showMessageDialog(this, "✅ Inicio de sesión exitoso");
+
+        VentanaPrincipal ventana = new VentanaPrincipal();
+        ventana.setVisible(true);
+        this.dispose();
+
+    } else {
+        JOptionPane.showMessageDialog(this, "❌ Usuario o contraseña incorrectos");
+    }
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIngresarActionPerformed
 
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
+
+    private void btnRegistrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarUsuarioActionPerformed
+        CrearUsuario crearUsuario = new CrearUsuario();
+        crearUsuario.setVisible(true);
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarUsuarioActionPerformed
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -151,6 +231,7 @@ if (usuario.equals("admin") && contrasena.equals("1234")) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btnRegistrarUsuario;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblTitulo;
